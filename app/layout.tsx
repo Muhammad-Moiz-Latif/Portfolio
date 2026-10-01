@@ -18,7 +18,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       lang="en"
       className={`${lato.className} h-full`}
     >
-      <body className="min-h-full flex flex-col p-6">
+      <body className="flex min-h-dvh flex-col">
         <NavBar />
         {children}
       </body>
