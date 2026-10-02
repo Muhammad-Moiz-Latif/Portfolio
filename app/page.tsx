@@ -2,8 +2,8 @@ import Hero from "./components/hero"
 
 export default function Home() {
   return (
-    <main className="h-dvh flex-none pt-10">
-      <div className="h-[calc(100dvh-2.5rem)] overflow-hidden">
+    <main id="home" className="h-dvh flex-none p-0 md:p-0">
+      <div className="h-dvh overflow-hidden">
         <Hero />
       </div>
     </main>
