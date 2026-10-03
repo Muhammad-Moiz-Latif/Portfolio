@@ -22,7 +22,6 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${ptSans.className} h-full`}>
       <body className="min-h-dvh bg-paper text-ink antialiased">
-        <NavBar />
         {children}
       </body>
     </html>

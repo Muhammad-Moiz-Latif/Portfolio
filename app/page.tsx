@@ -1,11 +1,14 @@
-import Hero from "./components/hero"
+import NavBar from "@/app/components/nav";
+import Hero from "@/app/components/hero";
+import { archivo } from "@/app/fonts";
 
 export default function Home() {
   return (
-    <main id="home" className="h-dvh flex-none p-0 md:p-0">
-      <div className="h-dvh overflow-hidden">
-        <Hero />
-      </div>
+    <main
+      className={`flex h-dvh flex-col overflow-hidden bg-paper text-ink ${archivo.className}`}
+    >
+      <NavBar />
+      <Hero />
     </main>
-  )
+  );
 }

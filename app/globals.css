@@ -1,11 +1,11 @@
 @import "tailwindcss";
 
 :root {
-  --paper: #151514;
-  --surface: #292826;
-  --ink: #F1EFEA;
-  --muted: #918E87;
-  --accent: #e36e40;
+  --paper: #11110F;
+  --surface: #242320;
+  --ink: #EDE9E0;
+  --muted: #918C83;
+  --accent: #C56A4A;
 }
 
 /* .light {
@@ -17,11 +17,11 @@
 }
 
 .dark {
-  --paper: #151514;
-  --surface: #292826;
-  --ink: #F1EFEA;
-  --muted: #918E87;
-  --accent: #C96A4A;
+ --paper: #11110F;
+  --surface: #242320;
+  --ink: #F2EEE6;
+  --muted: #9A958B;
+  --accent: #C56A4A;
 } */
 
 @theme inline {
