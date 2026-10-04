@@ -15,7 +15,7 @@ export default function HeroBackground({
 }: HeroBackgroundProps) {
     return (
         <section
-            className={`relative flex min-h-0 flex-1 flex-col overflow-hidden bg-paper ${className}`}
+            className={`relative flex min-h-[88vh] flex-1 flex-col overflow-hidden bg-paper ${className}`}
         >
             {/* TITLE — sits behind the portrait, split around a centered gap */}
             <div
