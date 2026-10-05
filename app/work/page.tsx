@@ -862,7 +862,8 @@ export default function WorkPage() {
 
             {projects.map((project, i) => {
                 const theme = i % 2 === 0 ? themes.dark : themes.light;
-                const imageLeft = i % 2 === 1;
+                // Project 01 image on LEFT, 02 on RIGHT, 03 on LEFT, etc.
+                const imageLeft = i % 2 === 0;
                 const next = projects[i + 1];
 
                 return (
@@ -905,9 +906,9 @@ export default function WorkPage() {
 
                             {/* One-screen project composition */}
                             <div
-                                className={`grid min-h-0 flex-1 items-center gap-7 py-6 lg:grid-cols-12 lg:gap-10 lg:py-8 [&>div:first-child]:order-first [&>div:last-child]:order-last lg:[&>div:first-child]:order-none lg:[&>div:last-child]:order-none ${imageLeft
-                                    ? "lg:[&>div:first-child]:order-2"
-                                    : ""
+                                className={`grid min-h-0 flex-1 items-center gap-7 py-6 lg:grid-cols-12 lg:gap-10 lg:py-8 ${imageLeft
+                                        ? "lg:[&>div:first-child]:order-1 lg:[&>div:last-child]:order-2"
+                                        : "lg:[&>div:first-child]:order-2 lg:[&>div:last-child]:order-1"
                                     }`}
                             >
                                 {/* Project visual */}
