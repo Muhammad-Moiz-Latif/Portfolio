@@ -55,7 +55,7 @@ export default function Hero() {
                     <p
                         className={`text-[clamp(1.45rem,2.15vw,2.35rem)] leading-[1.12] text-ink max-[425px]:text-center ${serif.className}`}
                     >
-                        I like software that feels simple on the surface —{" "}
+                        I like software that feels simple on the surface -{" "}
                         <em className="text-muted">
                             because the thinking underneath isn&apos;t.
                         </em>
@@ -100,9 +100,10 @@ export default function Hero() {
                 {/* RIGHT — short positioning + social icons */}
                 <MotionMountReveal className={`hidden flex-col md:flex ${COLUMN}`} delay={0.1}>
                     <p className="text-sm leading-6 text-ink/70">
-                        I build full-stack products with the weight in the systems —
+                        I build full-stack products with the weight in the systems,
                         making them fast, reliable, and easy to reason about.
                     </p>
+
 
                     <MotionStagger className="mt-8 flex w-full items-center justify-between">
                         {socials.map(({ label, href, Icon }) => (
@@ -124,7 +125,7 @@ export default function Hero() {
                                         rel="noopener noreferrer"
                                         className="group flex size-12 items-center justify-center rounded-full border border-ink/25 text-ink/70 transition-all duration-300 hover:-translate-y-1 hover:border-accent hover:text-accent"
                                     >
-                                    <Icon className="text-[18px] transition-transform duration-300 group-hover:scale-110" />
+                                        <Icon className="text-[18px] transition-transform duration-300 group-hover:scale-110" />
                                     </a>
                                 )}
                             </MotionItem>

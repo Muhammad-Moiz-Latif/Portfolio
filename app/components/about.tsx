@@ -1,5 +1,4 @@
 import { mono, serif } from "@/app/fonts";
-import { FiArrowDownRight } from "react-icons/fi";
 import { MotionReveal, MotionStagger, MotionItem } from "./motion";
 
 const principles = [
@@ -37,57 +36,49 @@ export default function About() {
                     <span
                         className={`${mono.className} hidden text-[9px] uppercase tracking-[0.25em] text-paper/40 sm:block`}
                     >
-                        The way I approach the work
+                        How I approach the work
                     </span>
                 </MotionReveal>
 
                 {/* MAIN */}
-                <div className="grid flex-1 grid-cols-1 gap-10 py-8 lg:grid-cols-[1.1fr_0.9fr] lg:items-center lg:gap-20 lg:py-10">
+                <div className="grid flex-1 grid-cols-1 gap-12 py-10 lg:grid-cols-[1.1fr_0.9fr] lg:items-center lg:gap-24 lg:py-14">
 
-                    {/* LEFT */}
+                    {/* LEFT — INTRO */}
                     <MotionReveal className="flex flex-col justify-center">
 
-                        <p
-                            className={`${mono.className} mb-4 text-[8px] uppercase tracking-[0.28em] text-accent`}
-                        >
-                            A working principle
-                        </p>
-
                         <h2
-                            className={`${serif.className} text-[clamp(2.5rem,5.8vw,6.2rem)] leading-[0.86] tracking-[-0.055em]`}
+                            className={`${serif.className} max-w-[720px] text-[clamp(2.8rem,5.8vw,6.2rem)] leading-[0.88] tracking-[-0.055em]`}
                         >
-                            Simple on the
+                            I like understanding
                             <br />
-                            surface.
-                            <span className="mt-2 block text-paper/45">
-                                Deep underneath.
-                            </span>
+                            things before I
+                            <span className="text-paper/40"> build them.</span>
                         </h2>
 
-                        <div className="mt-7 flex max-w-[580px] items-start gap-4">
-                            <FiArrowDownRight className="mt-1 shrink-0 text-accent" />
+                        <p className="mt-8 max-w-[560px] text-[13px] leading-6 text-paper/60 lg:text-sm">
+                            I care about what happens underneath the interface:
+                            how the pieces fit together, where complexity comes
+                            from, and what can go wrong. The goal is not to make
+                            things complicated. It is to make them make sense.
+                        </p>
 
-                            <p className="max-w-[520px] text-[13px] leading-5 text-paper/60 lg:text-sm lg:leading-6">
-                                I enjoy understanding things all the way down.
-                                Not because every problem needs to be complicated,
-                                but because knowing what is happening underneath
-                                makes it easier to decide what doesn&apos;t need to be.
-                            </p>
-                        </div>
-
-                        {/* QUOTE — kept visually attached to the statement */}
-                        <div className="mt-8 border-l border-accent/50 pl-5 lg:mt-10">
+                        {/* QUOTE */}
+                        <div className="mt-10 max-w-[600px] border-l border-accent/50 pl-5 lg:mt-14">
                             <blockquote
-                                className={`${serif.className} max-w-[650px] text-[clamp(1.45rem,2.4vw,2.35rem)] leading-[1.02] tracking-[-0.025em]`}
+                                className={`${serif.className} text-[clamp(1.15rem,1.8vw,1.65rem)] leading-[1.1] tracking-[-0.02em] text-paper/80`}
                             >
                                 An idiot admires{" "}
-                                <span className="text-paper/30">complexity</span>,
-                                a genius admires{" "}
-                                <em className="text-accent">simplicity.</em>
+                                <span className="text-paper/30">
+                                    complexity
+                                </span>
+                                , a genius admires{" "}
+                                <em className="text-accent">
+                                    simplicity.
+                                </em>
                             </blockquote>
 
                             <p
-                                className={`${mono.className} mt-3 text-[8px] uppercase tracking-[0.2em] text-paper/35`}
+                                className={`${mono.className} mt-3 text-[8px] uppercase tracking-[0.2em] text-paper/30`}
                             >
                                 — Terry A. Davis
                             </p>
@@ -100,7 +91,7 @@ export default function About() {
                             {principles.map((principle) => (
                                 <MotionItem
                                     key={principle.number}
-                                    className="group grid grid-cols-[38px_1fr] gap-3 border-b border-paper/15 py-5"
+                                    className="group grid grid-cols-[38px_1fr] gap-3 border-b border-paper/15 py-6"
                                 >
                                     <span
                                         className={`${serif.className} text-xl leading-none text-paper/25 transition-colors duration-300 group-hover:text-accent`}
@@ -121,12 +112,11 @@ export default function About() {
                             ))}
                         </MotionStagger>
 
-                        {/* SMALL PERSONAL MARK */}
-                        <div className="mt-6 flex items-center justify-between">
+                        <MotionReveal delay={0.15} className="mt-6 flex items-center justify-between">
                             <span
                                 className={`${mono.className} text-[8px] uppercase tracking-[0.2em] text-paper/30`}
                             >
-                                Understand · Simplify · Build
+                                Principles over prescriptions
                             </span>
 
                             <span
@@ -134,12 +124,12 @@ export default function About() {
                             >
                                 01 / 05
                             </span>
-                        </div>
+                        </MotionReveal>
                     </div>
                 </div>
 
                 {/* FOOTER */}
-                <div className="flex shrink-0 items-center justify-between border-t border-paper/15 pt-4">
+                <MotionReveal className="flex shrink-0 items-center justify-between border-t border-paper/15 pt-4">
                     <span
                         className={`${mono.className} text-[8px] uppercase tracking-[0.2em] text-paper/30`}
                     >
@@ -151,7 +141,7 @@ export default function About() {
                     >
                         Moiz Latif
                     </span>
-                </div>
+                </MotionReveal>
             </div>
         </section>
     );
