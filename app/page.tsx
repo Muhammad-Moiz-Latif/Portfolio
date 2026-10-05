@@ -1,4 +1,3 @@
-import NavBar from "@/app/components/nav";
 import Hero from "@/app/components/hero";
 import { archivo } from "@/app/fonts";
 import About from "./components/about";
@@ -12,7 +11,6 @@ export default function Home() {
     <main
       className={`flex min-h-dvh flex-col overflow-x-hidden bg-paper text-ink ${archivo.className}`}
     >
-      <NavBar />
       <Hero />
       <About />
       <Capabilities />

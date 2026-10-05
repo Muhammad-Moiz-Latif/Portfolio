@@ -1,7 +1,7 @@
 const links = [
-    { label: "About", href: "#about" },
-    { label: "Work", href: "#projects" },
-    { label: "Contact", href: "#contact" },
+    { label: "About", href: "/#about" },
+    { label: "Work", href: "/work" },
+    { label: "Contact", href: "/#contact" },
 ];
 
 export default function NavBar() {
@@ -12,7 +12,7 @@ export default function NavBar() {
                 aria-label="Primary"
             >
                 <a
-                    href="#home"
+                    href="/"
                     className="text-[11px] font-semibold uppercase tracking-[0.28em] text-ink sm:text-xs"
                 >
                     M. Moiz Latif

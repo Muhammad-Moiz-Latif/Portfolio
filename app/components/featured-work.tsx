@@ -1,6 +1,17 @@
+'use client'
+
 import Image from "next/image";
+import type { StaticImageData } from "next/image";
+import { useEffect, useState } from "react";
 import type { IconType } from "react-icons";
-import { FiArrowDown, FiArrowUpRight } from "react-icons/fi";
+import {
+    FiArrowDown,
+    FiArrowUpRight,
+    FiChevronLeft,
+    FiChevronRight,
+    FiGithub,
+    FiX,
+} from "react-icons/fi";
 import { FaReact } from "react-icons/fa";
 import {
     SiTypescript,
@@ -20,11 +31,36 @@ import {
 } from "react-icons/si";
 import { mono, serif } from "@/app/fonts";
 
-import devflow_thumbnail from "@/app/assets/devflow-01.png";
+import devflow_thumbnail from "@/app/assets/devflow-05.png";
+import devflow_01 from "@/app/assets/devflow-04.png";
+import devflow_02 from "@/app/assets/devflow-02.png";
+import devflow_03 from "@/app/assets/devflow-03.png";
+import devflow_04 from "@/app/assets/devflow-01.png";
 import gizmo_thumbnail from "@/app/assets/gizmo-01.png";
+import gizmo_01 from "@/app/assets/gizmo-04.png";
+import gizmo_02 from "@/app/assets/gizmo-02.png";
+import gizmo_03 from "@/app/assets/gizmo-03.png";
+import gizmo_04 from "@/app/assets/gizmo-05.png";
 import postvault_thumbnail from "@/app/assets/postvault-01.png";
+import postvault_01 from "@/app/assets/postvault-03.png";
+import postvault_02 from "@/app/assets/postvault-04.png";
+import postvault_03 from "@/app/assets/postvault-05.png";
+import postvault_04 from "@/app/assets/postvault-02.png";
 
-const projects = [
+type Project = {
+    number: string;
+    name: string;
+    category: string;
+    description: string;
+    stack: string[];
+    deployed: string;
+    href: string;
+    github?: string;
+    images: StaticImageData[];
+    imageAlt: string;
+};
+
+const projects: Project[] = [
     {
         number: "01",
         name: "DevFlow",
@@ -49,7 +85,8 @@ const projects = [
         ],
         deployed: "Frontend on Vercel · Backend on Render",
         href: "https://dev-flow-brown.vercel.app",
-        image: devflow_thumbnail,
+        github: "https://github.com/Muhammad-Moiz-Latif/DevFlow",
+        images: [devflow_thumbnail, devflow_01, devflow_02, devflow_03, devflow_04],
         imageAlt: "DevFlow sprint board with tasks across workspace columns",
     },
     {
@@ -70,7 +107,8 @@ const projects = [
         ],
         deployed: "Frontend on Vercel · Backend on Railway",
         href: "https://gizmo-jb17.vercel.app",
-        image: gizmo_thumbnail,
+        github: "https://github.com/Muhammad-Moiz-Latif/Gizmo",
+        images: [gizmo_thumbnail, gizmo_01, gizmo_02, gizmo_03, gizmo_04],
         imageAlt: "Gizmo storefront showing the product catalog",
     },
     {
@@ -92,7 +130,14 @@ const projects = [
         ],
         deployed: "Frontend on Vercel · Backend on Render",
         href: "https://v0-postvault.vercel.app",
-        image: postvault_thumbnail,
+        github: "https://github.com/Muhammad-Moiz-Latif/postvault",
+        images: [
+            postvault_thumbnail,
+            postvault_01,
+            postvault_02,
+            postvault_03,
+            postvault_04
+        ],
         imageAlt: "PostVault article page in the publishing platform",
     },
 ];
@@ -139,6 +184,265 @@ const themes = {
         cta: "border-ink/30",
     },
 } as const;
+
+/* ------------------------------------------------------------------ */
+/*  Project visual — carousel + lightbox (same behaviour as before)   */
+/* ------------------------------------------------------------------ */
+
+function ProjectVisual({
+    project,
+    theme,
+}: {
+    project: Project;
+    theme: (typeof themes)[keyof typeof themes];
+}) {
+    const [activeIndex, setActiveIndex] = useState(0);
+    const [lightboxOpen, setLightboxOpen] = useState(false);
+
+    const images = project.images ?? [];
+    const hasImages = images.length > 0;
+    const hasMultiple = images.length > 1;
+
+    const goPrev = () =>
+        setActiveIndex((prev) => (prev - 1 + images.length) % images.length);
+    const goNext = () =>
+        setActiveIndex((prev) => (prev + 1) % images.length);
+
+    useEffect(() => {
+        if (!lightboxOpen) return;
+
+        const original = document.body.style.overflow;
+        document.body.style.overflow = "hidden";
+
+        const onKey = (e: KeyboardEvent) => {
+            if (e.key === "Escape") setLightboxOpen(false);
+            if (!hasMultiple) return;
+            if (e.key === "ArrowLeft") goPrev();
+            if (e.key === "ArrowRight") goNext();
+        };
+
+        window.addEventListener("keydown", onKey);
+
+        return () => {
+            document.body.style.overflow = original;
+            window.removeEventListener("keydown", onKey);
+        };
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [lightboxOpen, hasMultiple, images.length]);
+
+    if (!hasImages) {
+        return (
+            <div
+                className={`relative flex h-full w-full flex-col justify-between overflow-hidden border ${theme.frame} bg-current/[0.04] p-7 sm:p-10`}
+            >
+                <span
+                    className={`${mono.className} text-[8px] uppercase tracking-[0.2em] ${theme.faint}`}
+                >
+                    {project.category}
+                </span>
+
+                <span
+                    className={`${serif.className} block text-[clamp(4rem,11vw,9rem)] leading-[0.75] tracking-[-0.06em] opacity-[0.08]`}
+                >
+                    {project.name}
+                </span>
+            </div>
+        );
+    }
+
+    return (
+        <>
+            <div
+                className={`relative h-full w-full overflow-hidden border ${theme.frame} shadow-[0_35px_100px_-35px_rgba(0,0,0,0.5)]`}
+            >
+                {/* Clickable layer — opens the lightbox */}
+                <button
+                    type="button"
+                    onClick={() => setLightboxOpen(true)}
+                    aria-label={`Open ${project.name} image ${activeIndex + 1} in full view`}
+                    className="absolute inset-0 z-0 cursor-zoom-in"
+                >
+                    <span className="sr-only">Enlarge image</span>
+                </button>
+
+                <div className="pointer-events-none absolute inset-0">
+                    {images.map((img, idx) => (
+                        <div
+                            key={idx}
+                            className={`absolute inset-0 transition-opacity duration-500 ease-out ${idx === activeIndex ? "opacity-100" : "opacity-0"
+                                }`}
+                            aria-hidden={idx !== activeIndex}
+                        >
+                            <Image
+                                src={img}
+                                alt={`${project.imageAlt} — view ${idx + 1}`}
+                                fill
+                                sizes="(min-width: 1280px) 62vw, (min-width: 1024px) 58vw, 100vw"
+                                className="object-cover object-center"
+                                priority={idx === 0}
+                            />
+                        </div>
+                    ))}
+                </div>
+
+                {/* Bottom gradient for indicator legibility */}
+                <div className="pointer-events-none absolute inset-x-0 bottom-0 h-20 bg-gradient-to-t from-black/55 to-transparent" />
+
+                {/* Side arrows */}
+                {hasMultiple && (
+                    <>
+                        <button
+                            type="button"
+                            onClick={(e) => {
+                                e.stopPropagation();
+                                goPrev();
+                            }}
+                            aria-label="Previous image"
+                            className="absolute left-3 top-1/2 z-10 flex size-10 -translate-y-1/2 items-center justify-center rounded-full border border-white/25 bg-black/40 text-white/85 backdrop-blur-md transition-all hover:border-white/70 hover:bg-black/60 hover:text-white sm:left-4"
+                        >
+                            <FiChevronLeft className="text-base" />
+                        </button>
+
+                        <button
+                            type="button"
+                            onClick={(e) => {
+                                e.stopPropagation();
+                                goNext();
+                            }}
+                            aria-label="Next image"
+                            className="absolute right-3 top-1/2 z-10 flex size-10 -translate-y-1/2 items-center justify-center rounded-full border border-white/25 bg-black/40 text-white/85 backdrop-blur-md transition-all hover:border-white/70 hover:bg-black/60 hover:text-white sm:right-4"
+                        >
+                            <FiChevronRight className="text-base" />
+                        </button>
+                    </>
+                )}
+
+                {/* Indicators */}
+                {hasMultiple && (
+                    <div className="absolute inset-x-0 bottom-0 z-10 flex items-center justify-center gap-2 pb-4">
+                        {images.map((_, idx) => (
+                            <button
+                                key={idx}
+                                type="button"
+                                onClick={(e) => {
+                                    e.stopPropagation();
+                                    setActiveIndex(idx);
+                                }}
+                                aria-label={`Go to image ${idx + 1}`}
+                                className={`h-[3px] rounded-full transition-all duration-300 ${idx === activeIndex
+                                    ? "w-6 bg-white"
+                                    : "w-3 bg-white/40 hover:bg-white/70"
+                                    }`}
+                            />
+                        ))}
+                    </div>
+                )}
+            </div>
+
+            {/* Lightbox */}
+            {lightboxOpen && (
+                <div
+                    role="dialog"
+                    aria-modal="true"
+                    aria-label={`${project.name} enlarged view`}
+                    onClick={() => setLightboxOpen(false)}
+                    className="fixed inset-0 z-[100] flex items-center justify-center bg-black/85 p-4 backdrop-blur-sm sm:p-8"
+                >
+                    <button
+                        type="button"
+                        onClick={(e) => {
+                            e.stopPropagation();
+                            setLightboxOpen(false);
+                        }}
+                        aria-label="Close enlarged view"
+                        className="absolute right-4 top-4 z-10 flex size-11 items-center justify-center rounded-full border border-white/25 bg-black/40 text-white/85 backdrop-blur-md transition-colors hover:border-white/70 hover:bg-black/60 hover:text-white sm:right-6 sm:top-6"
+                    >
+                        <FiX className="text-lg" />
+                    </button>
+
+                    {hasMultiple && (
+                        <>
+                            <button
+                                type="button"
+                                onClick={(e) => {
+                                    e.stopPropagation();
+                                    goPrev();
+                                }}
+                                aria-label="Previous image"
+                                className="absolute left-3 top-1/2 z-10 flex size-11 -translate-y-1/2 items-center justify-center rounded-full border border-white/25 bg-black/40 text-white/85 backdrop-blur-md transition-colors hover:border-white/70 hover:bg-black/60 hover:text-white sm:left-6"
+                            >
+                                <FiChevronLeft className="text-lg" />
+                            </button>
+
+                            <button
+                                type="button"
+                                onClick={(e) => {
+                                    e.stopPropagation();
+                                    goNext();
+                                }}
+                                aria-label="Next image"
+                                className="absolute right-3 top-1/2 z-10 flex size-11 -translate-y-1/2 items-center justify-center rounded-full border border-white/25 bg-black/40 text-white/85 backdrop-blur-md transition-colors hover:border-white/70 hover:bg-black/60 hover:text-white sm:right-6"
+                            >
+                                <FiChevronRight className="text-lg" />
+                            </button>
+                        </>
+                    )}
+
+                    <div
+                        onClick={(e) => e.stopPropagation()}
+                        className="relative max-h-[88vh] w-full max-w-[1400px]"
+                    >
+                        <div className="relative aspect-[2600/1200] w-full overflow-hidden border border-white/15 shadow-[0_35px_120px_-30px_rgba(0,0,0,0.9)]">
+                            {images.map((img, idx) => (
+                                <div
+                                    key={idx}
+                                    className={`absolute inset-0 transition-opacity duration-500 ease-out ${idx === activeIndex
+                                        ? "opacity-100"
+                                        : "opacity-0"
+                                        }`}
+                                    aria-hidden={idx !== activeIndex}
+                                >
+                                    <Image
+                                        src={img}
+                                        alt={`${project.imageAlt} — enlarged view ${idx + 1}`}
+                                        fill
+                                        sizes="100vw"
+                                        className="object-contain"
+                                        priority
+                                    />
+                                </div>
+                            ))}
+                        </div>
+
+                        {hasMultiple && (
+                            <div className="mt-4 flex items-center justify-center gap-2">
+                                {images.map((_, idx) => (
+                                    <button
+                                        key={idx}
+                                        type="button"
+                                        onClick={(e) => {
+                                            e.stopPropagation();
+                                            setActiveIndex(idx);
+                                        }}
+                                        aria-label={`Go to image ${idx + 1}`}
+                                        className={`h-[3px] rounded-full transition-all duration-300 ${idx === activeIndex
+                                            ? "w-6 bg-white"
+                                            : "w-3 bg-white/40 hover:bg-white/70"
+                                            }`}
+                                    />
+                                ))}
+                            </div>
+                        )}
+                    </div>
+                </div>
+            )}
+        </>
+    );
+}
+
+/* ------------------------------------------------------------------ */
+/*  Work                                                               */
+/* ------------------------------------------------------------------ */
 
 export default function Work() {
     const total = String(projects.length).padStart(2, "0");
@@ -310,84 +614,39 @@ export default function Work() {
                                         </ul>
 
                                         {/* CTA */}
-                                        <a
-                                            href={project.href}
-                                            target="_blank"
-                                            rel="noopener noreferrer"
-                                            className={`
-                                                group
-                                                relative
-                                                mt-8
-                                                flex
-                                                h-11
-                                                w-full
-                                                max-w-[250px]
-                                                items-center
-                                                justify-between
-                                                overflow-hidden
-                                                rounded-full
-                                                border
-                                                pl-5
-                                                pr-1
-                                                text-[10px]
-                                                font-medium
-                                                uppercase
-                                                tracking-[0.2em]
-                                                ${t.cta}
-                                                hover:border-accent
-                                            `}
+                                        <div
+                                            className={`mt-6 flex flex-wrap items-center gap-3 border-t pt-5 ${t.rule}`}
                                         >
-                                            <span
-                                                aria-hidden
-                                                className="
-                                                    absolute
-                                                    inset-0
-                                                    translate-y-full
-                                                    rounded-full
-                                                    bg-accent
-                                                    transition-transform
-                                                    duration-500
-                                                    group-hover:translate-y-0
-                                                "
-                                            />
+                                            {project.href && (
+                                                <a
+                                                    href={project.href}
+                                                    target="_blank"
+                                                    rel="noopener noreferrer"
+                                                    className="group flex h-9 items-center gap-4 rounded-full bg-accent pl-4 pr-1 text-[8px] font-semibold uppercase tracking-[0.18em] text-paper"
+                                                >
+                                                    <span>View live</span>
+                                                    <span className="flex size-7 items-center justify-center rounded-full bg-paper text-accent transition-transform duration-300 group-hover:rotate-45">
+                                                        <FiArrowUpRight />
+                                                    </span>
+                                                </a>
+                                            )}
 
-                                            <span
-                                                className="
-                                                    relative
-                                                    z-10
-                                                    transition-colors
-                                                    duration-500
-                                                    group-hover:text-paper
-                                                "
-                                            >
-                                                View live
-                                            </span>
-
-                                            <span
-                                                className="
-                                                    relative
-                                                    z-10
-                                                    flex
-                                                    size-8.5
-                                                    items-center
-                                                    justify-center
-                                                    rounded-full
-                                                    bg-accent
-                                                    text-paper
-                                                    transition-all
-                                                    duration-500
-                                                    group-hover:rotate-45
-                                                    group-hover:bg-paper
-                                                    group-hover:text-accent
-                                                "
-                                            >
-                                                ↗
-                                            </span>
-                                        </a>
+                                            {project.github && (
+                                                <a
+                                                    href={project.github}
+                                                    target="_blank"
+                                                    rel="noopener noreferrer"
+                                                    className={`group flex h-9 items-center gap-2 rounded-full border px-4 text-[8px] font-semibold uppercase tracking-[0.18em] transition-colors hover:border-accent hover:text-accent ${t.cta}`}
+                                                >
+                                                    <FiGithub />
+                                                    <span>Source</span>
+                                                </a>
+                                            )}
+                                        </div>
                                     </div>
                                 </div>
 
-                                {/* IMAGE */}
+                                {/* IMAGE — carousel + lightbox */}
                                 <div
                                     className={`
                                         relative
@@ -398,43 +657,7 @@ export default function Work() {
                                         ${flip ? "lg:order-1" : "lg:order-2"}
                                     `}
                                 >
-                                    <a
-                                        href={project.href}
-                                        target="_blank"
-                                        rel="noopener noreferrer"
-                                        tabIndex={-1}
-                                        className={`
-                                            group/img
-                                            relative
-                                            block
-                                            h-full
-                                            w-full
-                                            overflow-hidden
-                                            border
-                                            ${t.frame}
-                                            shadow-[0_35px_100px_-35px_rgba(0,0,0,0.5)]
-                                        `}
-                                    >
-                                        <Image
-                                            src={project.image}
-                                            alt={project.imageAlt}
-                                            fill
-                                            sizes="
-                                                (min-width: 1280px) 62vw,
-                                                (min-width: 1024px) 58vw,
-                                                100vw
-                                            "
-                                            className={`
-                                                object-cover
-                                                object-center
-                                                transition-transform
-                                                duration-700
-                                                ease-out
-                                                group-hover/img:scale-[1.015]
-                                            `}
-                                            priority={i === 0}
-                                        />
-                                    </a>
+                                    <ProjectVisual project={project} theme={t} />
                                 </div>
                             </div>
 

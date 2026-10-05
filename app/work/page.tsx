@@ -1,6 +1,5 @@
 'use client'
 
-import type { Metadata } from "next";
 import Image from "next/image";
 import type { StaticImageData } from "next/image";
 import Link from "next/link";
@@ -12,7 +11,6 @@ import {
     FiArrowUpRight,
     FiChevronLeft,
     FiChevronRight,
-    FiCheck,
     FiGithub,
     FiX,
 } from "react-icons/fi";
@@ -50,14 +48,17 @@ import devflow_thumbnail from "@/app/assets/devflow-05.png";
 import devflow_01 from "@/app/assets/devflow-04.png";
 import devflow_02 from "@/app/assets/devflow-02.png";
 import devflow_03 from "@/app/assets/devflow-03.png";
-import gizmo_thumbnail from "@/app/assets/gizmo-04.png";
-import gizmo_01 from "@/app/assets/gizmo-02.png";
-import gizmo_02 from "@/app/assets/gizmo-03.png";
-import gizmo_03 from "@/app/assets/gizmo-05.png";
-import postvault_thumbnail from "@/app/assets/postvault-02.png";
+import devflow_04 from "@/app/assets/devflow-01.png";
+import gizmo_thumbnail from "@/app/assets/gizmo-01.png";
+import gizmo_01 from "@/app/assets/gizmo-04.png";
+import gizmo_02 from "@/app/assets/gizmo-02.png";
+import gizmo_03 from "@/app/assets/gizmo-03.png";
+import gizmo_04 from "@/app/assets/gizmo-05.png";
+import postvault_thumbnail from "@/app/assets/postvault-01.png";
 import postvault_01 from "@/app/assets/postvault-03.png";
 import postvault_02 from "@/app/assets/postvault-04.png";
 import postvault_03 from "@/app/assets/postvault-05.png";
+import postvault_04 from "@/app/assets/postvault-02.png";
 import axion_thumbnail from "@/app/assets/axion-01.png";
 import axion_01 from "@/app/assets/axion-02.png";
 import axion_02 from "@/app/assets/axion-03.png";
@@ -69,11 +70,6 @@ import movielyzer_03 from "@/app/assets/movielyzer_04.png";
 
 
 
-const metadata: Metadata = {
-    title: "Work — Moiz Latif",
-    description:
-        "Selected work by Moiz Latif — full-stack systems, real-time applications, commerce platforms and product experiences.",
-};
 
 type Project = {
     number: string;
@@ -155,7 +151,7 @@ const projects: Project[] = [
         href: "https://dev-flow-brown.vercel.app",
         github: "https://github.com/Muhammad-Moiz-Latif/DevFlow",
 
-        images: [devflow_thumbnail, devflow_01, devflow_02, devflow_03],
+        images: [devflow_thumbnail, devflow_01, devflow_02, devflow_03, devflow_04],
         imageAlt: "DevFlow real-time project management workspace",
 
         accentLabel: "REAL-TIME SYSTEM",
@@ -209,7 +205,7 @@ const projects: Project[] = [
         href: "https://gizmo-jb17.vercel.app",
         github: "https://github.com/Muhammad-Moiz-Latif/Gizmo",
 
-        images: [gizmo_thumbnail, gizmo_01, gizmo_02, gizmo_03],
+        images: [gizmo_thumbnail, gizmo_01, gizmo_02, gizmo_03, gizmo_04],
         imageAlt: "Gizmo technology marketplace storefront",
 
         accentLabel: "FULL-STACK COMMERCE",
@@ -270,6 +266,7 @@ const projects: Project[] = [
             postvault_01,
             postvault_02,
             postvault_03,
+            postvault_04
         ],
         imageAlt: "PostVault social publishing platform",
 
@@ -316,7 +313,7 @@ const projects: Project[] = [
             "Radix UI",
         ],
 
-        href: "#",
+        href: "https://axion-two-beige.vercel.app",
         github: "https://github.com/Muhammad-Moiz-Latif/Axion",
 
         images: [axion_thumbnail, axion_01, axion_02, axion_03],
@@ -368,7 +365,7 @@ const projects: Project[] = [
             "Radix UI",
         ],
 
-        href: "#",
+        href: "https://movielyzer.vercel.app",
         github: "https://github.com/Muhammad-Moiz-Latif/movielyzer",
 
         images: [movielyzer_thumbnail, movielyzer_01, movielyzer_02, movielyzer_03],
@@ -757,26 +754,16 @@ export default function WorkPage() {
     const total = String(projects.length).padStart(2, "0");
 
     return (
-        <main id="work" className="overflow-hidden">
+        <main id="work" className="overflow-x-hidden bg-paper">
+            {/* Shared site navigation — Work is a real page, not just a section. */}
+
             {/* =========================================================
                 INTRO
             ========================================================= */}
 
-            <section className="relative min-h-[92svh] bg-paper text-ink">
-                <div className="mx-auto flex min-h-[92svh] w-full max-w-[1600px] flex-col px-6 py-6 sm:px-8 lg:px-12 lg:py-8">
-                    <header className="flex items-center justify-between border-b border-ink/15 pb-4">
-                        <span className="text-[9px] font-semibold uppercase tracking-[0.28em]">
-                            03 / Work
-                        </span>
-
-                        <span
-                            className={`${mono.className} text-[9px] uppercase tracking-[0.25em] text-ink/40`}
-                        >
-                            {total} Projects
-                        </span>
-                    </header>
-
-                    <div className="flex flex-1 items-center py-16 lg:py-20">
+            <section className="relative min-h-[calc(100svh-90px)] bg-paper text-ink">
+                <div className="mx-auto flex min-h-[calc(100svh-90px)] w-full max-w-[1600px] flex-col px-6 py-6 sm:px-8 lg:px-12 lg:py-8">
+                    <div className="flex flex-1 items-center py-14 lg:py-16">
                         <div className="grid w-full gap-14 lg:grid-cols-[0.58fr_0.42fr] lg:items-end lg:gap-20">
                             <div>
                                 <p
@@ -846,21 +833,6 @@ export default function WorkPage() {
                                 ))}
                             </div>
                         </div>
-                    </div>
-
-                    <div className="flex items-center justify-between border-t border-ink/15 pt-4">
-                        <span
-                            className={`${mono.className} text-[8px] uppercase tracking-[0.2em] text-ink/35`}
-                        >
-                            Case studies / selected archive
-                        </span>
-
-                        <span
-                            className={`${mono.className} flex items-center gap-2 text-[8px] uppercase tracking-[0.2em] text-ink/40`}
-                        >
-                            Scroll
-                            <FiArrowDown />
-                        </span>
                     </div>
                 </div>
             </section>
@@ -1006,9 +978,9 @@ export default function WorkPage() {
                                             )}
 
                                             <span
-                                                className={`${mono.className} ml-auto hidden text-[7px] uppercase tracking-[0.16em] ${theme.muted} sm:block`}
+                                                className={`${mono.className} ml-auto hidden text-[8px] uppercase tracking-[0.16em] ${theme.muted} sm:block`}
                                             >
-                                                {project.deployed || "Product experience"}
+                                                {project.deployed || "deployed on vercel"}
                                             </span>
                                         </div>
                                     </div>
@@ -1020,7 +992,7 @@ export default function WorkPage() {
                                 className={`flex shrink-0 items-center justify-between border-t pt-3 ${theme.border}`}
                             >
                                 <span
-                                    className={`${mono.className} text-[7px] uppercase tracking-[0.2em] ${theme.muted}`}
+                                    className={`${mono.className} text-[8px] uppercase tracking-[0.2em] ${theme.muted}`}
                                 >
                                     {project.problem.split(".")[0]}.
                                 </span>
@@ -1031,7 +1003,7 @@ export default function WorkPage() {
                                         className="group flex items-center gap-2 text-right"
                                     >
                                         <span
-                                            className={`${mono.className} text-[7px] uppercase tracking-[0.2em] ${theme.muted}`}
+                                            className={`${mono.className} text-[9px] uppercase tracking-[0.2em] ${theme.muted}`}
                                         >
                                             Next · {next.name}
                                         </span>
@@ -1043,7 +1015,7 @@ export default function WorkPage() {
                                         className="group flex items-center gap-2 text-right"
                                     >
                                         <span
-                                            className={`${mono.className} text-[7px] uppercase tracking-[0.2em] ${theme.muted}`}
+                                            className={`${mono.className} text-[9px] uppercase tracking-[0.2em] ${theme.muted}`}
                                         >
                                             Back to work
                                         </span>
@@ -1057,71 +1029,47 @@ export default function WorkPage() {
             })}
 
             {/* =========================================================
-                END STATEMENT
+                FOOTER
             ========================================================= */}
 
-            <section className="bg-paper px-6 py-32 text-ink sm:px-8 lg:px-12 lg:py-48">
+            <footer className="bg-paper px-6 pb-8 pt-20 text-ink sm:px-8 lg:px-12 lg:pb-10 lg:pt-28">
                 <div className="mx-auto max-w-[1600px]">
-                    <div className="grid gap-14 lg:grid-cols-[0.7fr_0.3fr] lg:items-end">
+                    <div className="flex flex-col gap-8 border-t border-ink/15 pt-5 sm:flex-row sm:items-end sm:justify-between">
                         <div>
-                            <SectionLabel>Beyond the screenshots</SectionLabel>
+                            <SectionLabel>End of work</SectionLabel>
 
-                            <h2
-                                className={`${serif.className} mt-7 max-w-[1050px] text-[clamp(3.8rem,7.5vw,8rem)] leading-[0.8] tracking-[-0.065em]`}
+                            <p
+                                className={`${serif.className} mt-4 max-w-[620px] text-[clamp(2rem,4vw,3.8rem)] leading-[0.9] tracking-[-0.05em]`}
                             >
-                                I build systems,
+                                Five projects.
                                 <br />
                                 <span className="text-accent">
-                                    not just screens.
+                                    One engineering mindset.
                                 </span>
-                            </h2>
-                        </div>
-
-                        <div>
-                            <p className="text-[13px] leading-6 text-ink/55">
-                                The projects above span different products,
-                                but the underlying goal stays the same:
-                                understand the problem, design the experience,
-                                and build the system behind it.
                             </p>
-
-                            <div className="mt-8 flex flex-wrap gap-3">
-                                <Link
-                                    href="/#about"
-                                    className="flex h-12 items-center gap-5 rounded-full border border-ink/20 pl-6 pr-2 text-[9px] font-semibold uppercase tracking-[0.2em] transition-colors hover:border-accent hover:text-accent"
-                                >
-                                    About me
-
-                                    <span className="flex size-8 items-center justify-center rounded-full bg-accent text-paper">
-                                        <FiArrowUpRight />
-                                    </span>
-                                </Link>
-
-                                <Link
-                                    href="/#contact"
-                                    className="flex h-12 items-center gap-5 rounded-full bg-accent pl-6 pr-2 text-[9px] font-semibold uppercase tracking-[0.2em] text-paper"
-                                >
-                                    Get in touch
-
-                                    <span className="flex size-8 items-center justify-center rounded-full bg-paper text-accent">
-                                        <FiArrowUpRight />
-                                    </span>
-                                </Link>
-                            </div>
                         </div>
-                    </div>
 
-                    <div className="mt-20 flex items-center gap-3 border-t border-ink/10 pt-5">
-                        <FiCheck className="text-accent" />
+                        <div className="flex flex-wrap gap-3">
+                            <Link
+                                href="/#contact"
+                                className="flex h-11 items-center gap-4 rounded-full bg-accent pl-5 pr-2 text-[9px] font-semibold uppercase tracking-[0.2em] text-paper"
+                            >
+                                Get in touch
+                                <span className="flex size-7 items-center justify-center rounded-full bg-paper text-accent">
+                                    <FiArrowUpRight />
+                                </span>
+                            </Link>
 
-                        <span
-                            className={`${mono.className} text-[8px] uppercase tracking-[0.2em] text-ink/35`}
-                        >
-                            Five projects · one engineering mindset
-                        </span>
+                            <a
+                                href="#work"
+                                className="flex h-11 items-center gap-4 rounded-full border border-ink/20 pl-5 pr-5 text-[9px] font-semibold uppercase tracking-[0.2em] transition-colors hover:border-accent hover:text-accent"
+                            >
+                                Back to top
+                            </a>
+                        </div>
                     </div>
                 </div>
-            </section>
+            </footer>
         </main>
     );
 }
