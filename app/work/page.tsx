@@ -4,6 +4,7 @@ import Image from "next/image";
 import type { StaticImageData } from "next/image";
 import Link from "next/link";
 import { useEffect, useState } from "react";
+import { AnimatePresence, motion } from "motion/react";
 
 import type { IconType } from "react-icons";
 import {
@@ -39,10 +40,16 @@ import {
     SiTailwindcss,
     SiRadixui,
     SiReactrouter,
-    SiSocketdotio,
 } from "react-icons/si";
 
 import { mono, serif } from "@/app/fonts";
+// ⚠️ Adjust this path to wherever motion.tsx lives in your project.
+import {
+    MotionMountReveal,
+    MotionReveal,
+    MotionStagger,
+    MotionItem,
+} from "@/app/components/motion";
 
 import devflow_thumbnail from "@/app/assets/devflow-05.png";
 import devflow_01 from "@/app/assets/devflow-04.png";
@@ -67,9 +74,6 @@ import movielyzer_thumbnail from "@/app/assets/movielyzer_01.png";
 import movielyzer_01 from "@/app/assets/movielyzer_02.png";
 import movielyzer_02 from "@/app/assets/movielyzer_03.png";
 import movielyzer_03 from "@/app/assets/movielyzer_04.png";
-
-
-
 
 type Project = {
     number: string;
@@ -260,7 +264,6 @@ const projects: Project[] = [
         href: "https://v0-postvault.vercel.app/auth",
         github: "https://github.com/Muhammad-Moiz-Latif/postvault",
 
-        // Only one image provided so far — duplicate until real screenshots arrive.
         images: [
             postvault_thumbnail,
             postvault_01,
@@ -490,6 +493,10 @@ function ProjectVisual({
     const images = project.images ?? [];
     const hasImages = images.length > 0;
     const hasMultiple = images.length > 1;
+    const isNear = (idx: number) =>
+        idx === activeIndex ||
+        idx === (activeIndex + 1) % images.length ||
+        idx === (activeIndex - 1 + images.length) % images.length;
 
     const goPrev = () =>
         setActiveIndex((prev) => (prev - 1 + images.length) % images.length);
@@ -571,7 +578,7 @@ function ProjectVisual({
                 </button>
 
                 <div className="pointer-events-none absolute inset-0">
-                    {images.map((img, idx) => (
+                    {images.map((img, idx) => isNear(idx) ? (
                         <div
                             key={idx}
                             className={`absolute inset-0 transition-opacity duration-500 ease-out ${idx === activeIndex
@@ -586,10 +593,10 @@ function ProjectVisual({
                                 fill
                                 sizes="(min-width: 1024px) 64vw, 100vw"
                                 className="object-cover object-center"
-                                priority={idx === 0}
+                                placeholder="blur"
                             />
                         </div>
-                    ))}
+                    ) : null)}
                 </div>
 
                 {/* Bottom gradient for indicator legibility */}
@@ -647,105 +654,116 @@ function ProjectVisual({
             </div>
 
             {/* Lightbox */}
-            {lightboxOpen && (
-                <div
-                    role="dialog"
-                    aria-modal="true"
-                    aria-label={`${project.name} enlarged view`}
-                    onClick={() => setLightboxOpen(false)}
-                    className="fixed inset-0 z-[100] flex items-center justify-center bg-black/85 p-4 backdrop-blur-sm sm:p-8"
-                >
-                    {/* Close button */}
-                    <button
-                        type="button"
-                        onClick={(e) => {
-                            e.stopPropagation();
-                            setLightboxOpen(false);
-                        }}
-                        aria-label="Close enlarged view"
-                        className="absolute right-4 top-4 z-10 flex size-11 items-center justify-center rounded-full border border-white/25 bg-black/40 text-white/85 backdrop-blur-md transition-colors hover:border-white/70 hover:bg-black/60 hover:text-white sm:right-6 sm:top-6"
+            <AnimatePresence>
+                {lightboxOpen && (
+                    <motion.div
+                        key={`${project.name}-lightbox`}
+                        role="dialog"
+                        aria-modal="true"
+                        aria-label={`${project.name} enlarged view`}
+                        onClick={() => setLightboxOpen(false)}
+                        className="fixed inset-0 z-[100] flex items-center justify-center bg-black/85 p-4 backdrop-blur-sm sm:p-8"
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
+                        transition={{ duration: 0.3 }}
                     >
-                        <FiX className="text-lg" />
-                    </button>
+                        {/* Close button */}
+                        <button
+                            type="button"
+                            onClick={(e) => {
+                                e.stopPropagation();
+                                setLightboxOpen(false);
+                            }}
+                            aria-label="Close enlarged view"
+                            className="absolute right-4 top-4 z-10 flex size-11 items-center justify-center rounded-full border border-white/25 bg-black/40 text-white/85 backdrop-blur-md transition-colors hover:border-white/70 hover:bg-black/60 hover:text-white sm:right-6 sm:top-6"
+                        >
+                            <FiX className="text-lg" />
+                        </button>
 
-                    {/* Prev / Next inside lightbox */}
-                    {hasMultiple && (
-                        <>
-                            <button
-                                type="button"
-                                onClick={(e) => {
-                                    e.stopPropagation();
-                                    goPrev();
-                                }}
-                                aria-label="Previous image"
-                                className="absolute left-3 top-1/2 z-10 flex size-11 -translate-y-1/2 items-center justify-center rounded-full border border-white/25 bg-black/40 text-white/85 backdrop-blur-md transition-colors hover:border-white/70 hover:bg-black/60 hover:text-white sm:left-6"
-                            >
-                                <FiChevronLeft className="text-lg" />
-                            </button>
-
-                            <button
-                                type="button"
-                                onClick={(e) => {
-                                    e.stopPropagation();
-                                    goNext();
-                                }}
-                                aria-label="Next image"
-                                className="absolute right-3 top-1/2 z-10 flex size-11 -translate-y-1/2 items-center justify-center rounded-full border border-white/25 bg-black/40 text-white/85 backdrop-blur-md transition-colors hover:border-white/70 hover:bg-black/60 hover:text-white sm:right-6"
-                            >
-                                <FiChevronRight className="text-lg" />
-                            </button>
-                        </>
-                    )}
-
-                    {/* Enlarged image — stop propagation so clicks on it don't close */}
-                    <div
-                        onClick={(e) => e.stopPropagation()}
-                        className="relative max-h-[88vh] w-full max-w-[1400px]"
-                    >
-                        <div className="relative aspect-[2600/1200] w-full overflow-hidden border border-white/15 shadow-[0_35px_120px_-30px_rgba(0,0,0,0.9)]">
-                            {images.map((img, idx) => (
-                                <div
-                                    key={idx}
-                                    className={`absolute inset-0 transition-opacity duration-500 ease-out ${idx === activeIndex
-                                        ? "opacity-100"
-                                        : "opacity-0"
-                                        }`}
-                                    aria-hidden={idx !== activeIndex}
-                                >
-                                    <Image
-                                        src={img}
-                                        alt={`${project.imageAlt} — enlarged view ${idx + 1}`}
-                                        fill
-                                        sizes="100vw"
-                                        className="object-contain"
-                                        priority
-                                    />
-                                </div>
-                            ))}
-                        </div>
-
+                        {/* Prev / Next inside lightbox */}
                         {hasMultiple && (
-                            <div className="mt-4 flex items-center justify-center gap-2">
-                                {images.map((_, idx) => (
-                                    <button
-                                        key={idx}
-                                        type="button"
-                                        onClick={(e) => {
-                                            e.stopPropagation();
-                                            setActiveIndex(idx);
-                                        }}
-                                        aria-label={`Go to image ${idx + 1}`}
-                                        className={`h-[3px] rounded-full transition-all duration-300 ${idx === activeIndex
-                                            ? "w-6 bg-white"
-                                            : "w-3 bg-white/40 hover:bg-white/70"
-                                            }`}
-                                    />
-                                ))}
-                            </div>
+                            <>
+                                <button
+                                    type="button"
+                                    onClick={(e) => {
+                                        e.stopPropagation();
+                                        goPrev();
+                                    }}
+                                    aria-label="Previous image"
+                                    className="absolute left-3 top-1/2 z-10 flex size-11 -translate-y-1/2 items-center justify-center rounded-full border border-white/25 bg-black/40 text-white/85 backdrop-blur-md transition-colors hover:border-white/70 hover:bg-black/60 hover:text-white sm:left-6"
+                                >
+                                    <FiChevronLeft className="text-lg" />
+                                </button>
+
+                                <button
+                                    type="button"
+                                    onClick={(e) => {
+                                        e.stopPropagation();
+                                        goNext();
+                                    }}
+                                    aria-label="Next image"
+                                    className="absolute right-3 top-1/2 z-10 flex size-11 -translate-y-1/2 items-center justify-center rounded-full border border-white/25 bg-black/40 text-white/85 backdrop-blur-md transition-colors hover:border-white/70 hover:bg-black/60 hover:text-white sm:right-6"
+                                >
+                                    <FiChevronRight className="text-lg" />
+                                </button>
+                            </>
                         )}
-                    </div>
-                </div>
-            )}
+
+                        {/* Enlarged image — stop propagation so clicks on it don't close */}
+                        <motion.div
+                            onClick={(e) => e.stopPropagation()}
+                            className="relative max-h-[88svh] w-full max-w-[1400px]"
+                            initial={{ opacity: 0, scale: 0.97 }}
+                            animate={{ opacity: 1, scale: 1 }}
+                            exit={{ opacity: 0, scale: 0.97 }}
+                            transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
+                        >
+                            <div className="relative aspect-[2600/1200] w-full overflow-hidden border border-white/15 shadow-[0_35px_120px_-30px_rgba(0,0,0,0.9)]">
+                                {images.map((img, idx) => isNear(idx) ? (
+                                    <div
+                                        key={idx}
+                                        className={`absolute inset-0 transition-opacity duration-500 ease-out ${idx === activeIndex
+                                            ? "opacity-100"
+                                            : "opacity-0"
+                                            }`}
+                                        aria-hidden={idx !== activeIndex}
+                                    >
+                                        <Image
+                                            src={img}
+                                            alt={`${project.imageAlt} — enlarged view ${idx + 1}`}
+                                            fill
+                                            sizes="100vw"
+                                            className="object-contain"
+                                            placeholder="blur"
+                                        />
+                                    </div>
+                                ) : null)}
+                            </div>
+
+                            {hasMultiple && (
+                                <div className="mt-4 flex items-center justify-center gap-2">
+                                    {images.map((_, idx) => (
+                                        <button
+                                            key={idx}
+                                            type="button"
+                                            onClick={(e) => {
+                                                e.stopPropagation();
+                                                setActiveIndex(idx);
+                                            }}
+                                            aria-label={`Go to image ${idx + 1}`}
+                                            className={`h-[3px] rounded-full transition-all duration-300 ${idx === activeIndex
+                                                ? "w-6 bg-white"
+                                                : "w-3 bg-white/40 hover:bg-white/70"
+                                                }`}
+                                        />
+                                    ))}
+                                </div>
+                            )}
+                        </motion.div>
+                    </motion.div>
+                )}
+            </AnimatePresence>
         </>
     );
 }
@@ -761,11 +779,11 @@ export default function WorkPage() {
                 INTRO
             ========================================================= */}
 
-            <section className="relative min-h-[calc(100svh-90px)] bg-paper text-ink">
-                <div className="mx-auto flex min-h-[calc(100svh-90px)] w-full max-w-[1600px] flex-col px-6 py-6 sm:px-8 lg:px-12 lg:py-8">
+            <section className="relative min-h-0 bg-paper text-ink lg:min-h-[calc(100svh-5.5rem)]">
+                <div className="mx-auto flex min-h-0 w-full max-w-[1600px] flex-col px-6 py-10 sm:px-8 lg:min-h-[calc(100svh-5.5rem)] lg:px-12 lg:py-8">
                     <div className="flex flex-1 items-center py-14 lg:py-16">
                         <div className="grid w-full gap-14 lg:grid-cols-[0.58fr_0.42fr] lg:items-end lg:gap-20">
-                            <div>
+                            <MotionMountReveal>
                                 <p
                                     className={`${mono.className} mb-6 text-[9px] uppercase tracking-[0.25em] text-accent`}
                                 >
@@ -773,7 +791,7 @@ export default function WorkPage() {
                                 </p>
 
                                 <h1
-                                    className={`${serif.className} max-w-[900px] text-[clamp(4.3rem,9vw,9.5rem)] leading-[0.78] tracking-[-0.065em]`}
+                                    className={`${serif.className} max-w-[900px] text-[clamp(3rem,9vw,9.5rem)] leading-[0.78] tracking-[-0.065em]`}
                                 >
                                     Things
                                     <br />
@@ -798,40 +816,41 @@ export default function WorkPage() {
                                         Built to solve problems, not fill screens
                                     </span>
                                 </div>
-                            </div>
+                            </MotionMountReveal>
 
                             {/* PROJECT INDEX */}
-                            <div className="border-t border-ink/15">
+                            <MotionStagger className="border-t border-ink/15">
                                 {projects.map((project) => (
-                                    <a
-                                        key={project.number}
-                                        href={`#project-${project.number}`}
-                                        className="group grid grid-cols-[28px_1fr_auto] items-center gap-4 border-b border-ink/15 py-4 transition-colors hover:text-accent"
-                                    >
-                                        <span
-                                            className={`${mono.className} text-[9px] text-ink/30`}
+                                    <MotionItem key={project.number}>
+                                        <a
+                                            href={`#project-${project.number}`}
+                                            className="group grid min-h-12 grid-cols-[28px_1fr_auto] items-center gap-4 border-b border-ink/15 py-4 transition-colors hover:text-accent"
                                         >
-                                            {project.number}
-                                        </span>
+                                            <span
+                                                className={`${mono.className} text-[9px] text-ink/30`}
+                                            >
+                                                {project.number}
+                                            </span>
 
-                                        <div className="min-w-0">
-                                            <div className="flex items-baseline gap-3">
-                                                <span
-                                                    className={`${serif.className} text-[26px] leading-none tracking-[-0.035em]`}
-                                                >
-                                                    {project.name}
-                                                </span>
+                                            <div className="min-w-0">
+                                                <div className="flex items-baseline gap-3">
+                                                    <span
+                                                        className={`${serif.className} text-[26px] leading-none tracking-[-0.035em]`}
+                                                    >
+                                                        {project.name}
+                                                    </span>
 
-                                                <span className="hidden truncate text-[8px] uppercase tracking-[0.18em] text-ink/35 md:block">
-                                                    {project.category}
-                                                </span>
+                                                    <span className="hidden truncate text-[8px] uppercase tracking-[0.18em] text-ink/35 md:block">
+                                                        {project.category}
+                                                    </span>
+                                                </div>
                                             </div>
-                                        </div>
 
-                                        <FiArrowUpRight className="text-ink/30 transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 group-hover:text-accent" />
-                                    </a>
+                                            <FiArrowUpRight className="text-ink/30 transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 group-hover:text-accent" />
+                                        </a>
+                                    </MotionItem>
                                 ))}
-                            </div>
+                            </MotionStagger>
                         </div>
                     </div>
                 </div>
@@ -850,9 +869,16 @@ export default function WorkPage() {
                     <section
                         key={project.number}
                         id={`project-${project.number}`}
-                        className={`relative min-h-[100svh] overflow-hidden ${theme.section}`}
+                        className={`relative min-h-[100svh] overflow-x-clip ${theme.section}`}
                     >
-                        <div className="mx-auto flex min-h-[100svh] w-full max-w-[1600px] flex-col px-5 py-5 sm:px-8 lg:px-12 lg:py-6">
+                        {/* Animate the content, never the section background. */}
+                        <motion.div
+                            initial={{ opacity: 0, y: 24 }}
+                            whileInView={{ opacity: 1, y: 0 }}
+                            viewport={{ once: true, amount: 0.15 }}
+                            transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
+                            className="mx-auto flex min-h-[100svh] w-full max-w-[1600px] flex-col px-5 py-5 sm:px-8 lg:px-12 lg:py-6"
+                        >
                             {/* Compact project header */}
                             <header
                                 className={`flex shrink-0 items-center justify-between border-b pb-3 ${theme.border}`}
@@ -879,13 +905,13 @@ export default function WorkPage() {
 
                             {/* One-screen project composition */}
                             <div
-                                className={`grid min-h-0 flex-1 items-center gap-7 py-6 lg:grid-cols-12 lg:gap-10 lg:py-8 ${imageLeft
+                                className={`grid min-h-0 flex-1 items-center gap-7 py-6 lg:grid-cols-12 lg:gap-10 lg:py-8 [&>div:first-child]:order-first [&>div:last-child]:order-last lg:[&>div:first-child]:order-none lg:[&>div:last-child]:order-none ${imageLeft
                                     ? "lg:[&>div:first-child]:order-2"
                                     : ""
                                     }`}
                             >
                                 {/* Project visual */}
-                                <div className="min-w-0 lg:col-span-7">
+                                <div className="-mx-5 min-w-0 sm:mx-0 lg:col-span-7">
                                     <ProjectVisual
                                         project={project}
                                         theme={theme}
@@ -924,7 +950,7 @@ export default function WorkPage() {
                                         </p>
 
                                         {/* The strongest proof, without the case-study wall of text */}
-                                        <div className="mt-6 grid gap-3 border-y border-current/10 py-5 sm:grid-cols-3 lg:grid-cols-1 xl:grid-cols-3">
+                                        <div className="mt-6 grid gap-3 border-y border-current/10 py-5 sm:grid-cols-3 lg:grid-cols-1 2xl:grid-cols-3">
                                             {project.built.slice(0, 3).map((item, index) => (
                                                 <div key={item} className="flex gap-2.5">
                                                     <span
@@ -1023,7 +1049,7 @@ export default function WorkPage() {
                                     </a>
                                 )}
                             </footer>
-                        </div>
+                        </motion.div>
                     </section>
                 );
             })}
@@ -1033,7 +1059,7 @@ export default function WorkPage() {
             ========================================================= */}
 
             <footer className="bg-paper px-6 pb-8 pt-20 text-ink sm:px-8 lg:px-12 lg:pb-10 lg:pt-28">
-                <div className="mx-auto max-w-[1600px]">
+                <MotionReveal className="mx-auto max-w-[1600px]">
                     <div className="flex flex-col gap-8 border-t border-ink/15 pt-5 sm:flex-row sm:items-end sm:justify-between">
                         <div>
                             <SectionLabel>End of work</SectionLabel>
@@ -1068,7 +1094,7 @@ export default function WorkPage() {
                             </a>
                         </div>
                     </div>
-                </div>
+                </MotionReveal>
             </footer>
         </main>
     );

@@ -1,5 +1,6 @@
 import { mono, serif } from "@/app/fonts";
 import { FiArrowDownRight } from "react-icons/fi";
+import { MotionReveal, MotionStagger, MotionItem } from "./motion";
 
 const principles = [
     {
@@ -23,12 +24,12 @@ export default function About() {
     return (
         <section
             id="about"
-            className="relative flex min-h-dvh overflow-hidden bg-ink text-paper"
+            className="relative flex min-h-dvh overflow-x-clip bg-ink text-paper"
         >
             <div className="mx-auto flex w-full max-w-[1440px] flex-1 flex-col px-6 py-6 lg:px-14 lg:py-8">
 
                 {/* HEADER */}
-                <div className="flex shrink-0 items-center justify-between border-b border-paper/15 pb-4">
+                <MotionReveal className="flex shrink-0 items-center justify-between border-b border-paper/15 pb-4">
                     <span className="text-[9px] font-semibold uppercase tracking-[0.28em]">
                         01 / About
                     </span>
@@ -38,13 +39,13 @@ export default function About() {
                     >
                         The way I approach the work
                     </span>
-                </div>
+                </MotionReveal>
 
                 {/* MAIN */}
                 <div className="grid flex-1 grid-cols-1 gap-10 py-8 lg:grid-cols-[1.1fr_0.9fr] lg:items-center lg:gap-20 lg:py-10">
 
                     {/* LEFT */}
-                    <div className="flex flex-col justify-center">
+                    <MotionReveal className="flex flex-col justify-center">
 
                         <p
                             className={`${mono.className} mb-4 text-[8px] uppercase tracking-[0.28em] text-accent`}
@@ -53,7 +54,7 @@ export default function About() {
                         </p>
 
                         <h2
-                            className={`${serif.className} text-[clamp(3.2rem,5.8vw,6.2rem)] leading-[0.86] tracking-[-0.055em]`}
+                            className={`${serif.className} text-[clamp(2.5rem,5.8vw,6.2rem)] leading-[0.86] tracking-[-0.055em]`}
                         >
                             Simple on the
                             <br />
@@ -91,13 +92,13 @@ export default function About() {
                                 — Terry A. Davis
                             </p>
                         </div>
-                    </div>
+                    </MotionReveal>
 
                     {/* RIGHT — PRINCIPLES */}
                     <div className="lg:justify-self-end lg:w-full lg:max-w-[470px]">
-                        <div className="border-t border-paper/15">
+                        <MotionStagger className="border-t border-paper/15">
                             {principles.map((principle) => (
-                                <article
+                                <MotionItem
                                     key={principle.number}
                                     className="group grid grid-cols-[38px_1fr] gap-3 border-b border-paper/15 py-5"
                                 >
@@ -116,9 +117,9 @@ export default function About() {
                                             {principle.text}
                                         </p>
                                     </div>
-                                </article>
+                                </MotionItem>
                             ))}
-                        </div>
+                        </MotionStagger>
 
                         {/* SMALL PERSONAL MARK */}
                         <div className="mt-6 flex items-center justify-between">

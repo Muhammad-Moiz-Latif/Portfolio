@@ -1,5 +1,10 @@
 import { mono, serif } from "@/app/fonts";
 import { FiArrowDownRight, FiArrowUpRight } from "react-icons/fi";
+import {
+    MotionReveal,
+    MotionMilestone,
+    MotionRoutePath,
+} from "./motion";
 
 type Milestone = {
     year: string;
@@ -105,7 +110,7 @@ export default function Experience() {
         >
             <div className="mx-auto flex w-full max-w-[1440px] flex-col px-6 py-6 lg:px-14 lg:py-8">
                 {/* HEADER */}
-                <div className="flex shrink-0 items-center justify-between border-b border-ink/15 pb-4">
+                <MotionReveal className="flex shrink-0 items-center justify-between border-b border-ink/15 pb-4">
                     <span className="text-[9px] font-semibold uppercase tracking-[0.28em]">
                         04 / Experience
                     </span>
@@ -115,7 +120,7 @@ export default function Experience() {
                     >
                         A short record of the journey
                     </span>
-                </div>
+                </MotionReveal>
 
                 {/* MAIN */}
                 <div className="grid grid-cols-1 gap-12 pt-8 lg:grid-cols-[0.75fr_1.25fr] lg:gap-16 lg:pt-6">
@@ -147,42 +152,20 @@ export default function Experience() {
                     </div>
 
                     {/* RIGHT — THE ROUTE */}
-                    <div className="relative lg:h-[max(160dvh,1100px)]">
+                    <div className="relative xl:h-[max(175dvh,1250px)]">
                         {/* route lines (desktop) */}
-                        <svg
-                            aria-hidden
-                            viewBox="0 0 100 100"
-                            preserveAspectRatio="none"
-                            className="pointer-events-none absolute inset-0 hidden h-full w-full lg:block"
-                        >
-                            {segments.map((d, i) => (
-                                <path
-                                    key={d}
-                                    d={d}
-                                    fill="none"
-                                    vectorEffect="non-scaling-stroke"
-                                    className={
-                                        i === segments.length - 1
-                                            ? "stroke-accent"
-                                            : "stroke-ink/25"
-                                    }
-                                    strokeWidth={i === segments.length - 1 ? 2 : 1}
-                                />
-                            ))}
-
-                            {/* continues past Zynvex: still going */}
-                            <path
-                                d={`M ${last.x} ${last.y} L ${last.x} ${TAIL_END}`}
-                                fill="none"
-                                vectorEffect="non-scaling-stroke"
-                                className="stroke-accent"
-                                strokeWidth={2}
+                        <div className="lg:[&>div]:!hidden xl:[&>div]:!block">
+                            <MotionRoutePath
+                                segments={segments}
+                                lastX={last.x}
+                                lastY={last.y}
+                                tailEnd={TAIL_END}
                             />
-                        </svg>
+                        </div>
 
                         <ol>
                             {journey.map((m) => (
-                                <li
+                                <MotionMilestone
                                     key={m.title}
                                     style={
                                         {
@@ -190,7 +173,7 @@ export default function Experience() {
                                             "--y": `${m.y}%`,
                                         } as React.CSSProperties
                                     }
-                                    className={`relative border-l border-ink/20 pb-10 pl-7 lg:absolute lg:-mt-[7px] lg:border-l-0 lg:pb-0 lg:[left:var(--x)] lg:[top:var(--y)] ${m.level === 3 ? "lg:w-[60%]" : "lg:w-[46%]"
+                                    className={`relative border-l border-ink/20 pb-10 pl-7 xl:absolute xl:-mt-[7px] xl:border-l-0 xl:pb-0 xl:[left:var(--x)] xl:[top:var(--y)] ${m.level === 3 ? "xl:w-[60%]" : "xl:w-[46%]"
                                         }`}
                                 >
                                     {/* node */}
@@ -239,7 +222,7 @@ export default function Experience() {
                                             <FiArrowUpRight />
                                         </a>
                                     )}
-                                </li>
+                                </MotionMilestone>
                             ))}
                         </ol>
 
@@ -248,7 +231,7 @@ export default function Experience() {
                             style={
                                 { "--x": `${last.x}%` } as React.CSSProperties
                             }
-                            className={`${mono.className} border-l border-accent pb-1 pl-7 text-[8px] uppercase tracking-[0.22em] text-accent lg:absolute lg:bottom-0 lg:border-l-0 lg:pb-0 lg:pl-0 lg:[left:var(--x)] lg:-translate-x-1/2 lg:whitespace-nowrap`}
+                            className={`${mono.className} border-l border-accent pb-1 pl-7 text-[8px] uppercase tracking-[0.22em] text-accent xl:absolute xl:bottom-0 xl:border-l-0 xl:pb-0 xl:pl-0 xl:[left:var(--x)] xl:-translate-x-1/2 xl:whitespace-nowrap`}
                         >
                             ↓ Still building
                         </p>

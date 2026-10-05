@@ -1,7 +1,9 @@
 import type { Metadata } from "next";
+import type { Viewport } from "next";
 import { PT_Sans } from "next/font/google";
 import "./globals.css";
 import NavBar from "./components/nav";
+import { MotionProvider } from "./components/motion";
 
 const ptSans = PT_Sans({
   subsets: ["latin"],
@@ -14,16 +16,28 @@ export const metadata: Metadata = {
     "Software engineer building digital products from concept to production.",
 };
 
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  viewportFit: "cover",
+};
+
 export default function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`${ptSans.className} h-full`}>
+    <html
+      lang="en"
+      className={`${ptSans.className} h-full`}
+      data-scroll-behavior="smooth"
+    >
       <body className="min-h-dvh overflow-x-hidden bg-paper text-ink antialiased">
-        <NavBar />
-        {children}
+        <MotionProvider>
+          <NavBar />
+          {children}
+        </MotionProvider>
       </body>
     </html>
   );

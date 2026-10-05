@@ -2,7 +2,9 @@
 
 import Image from "next/image";
 import type { StaticImageData } from "next/image";
+import Link from "next/link";
 import { useEffect, useState } from "react";
+import { AnimatePresence, motion } from "motion/react";
 import type { IconType } from "react-icons";
 import {
     FiArrowDown,
@@ -202,6 +204,10 @@ function ProjectVisual({
     const images = project.images ?? [];
     const hasImages = images.length > 0;
     const hasMultiple = images.length > 1;
+    const isNear = (idx: number) =>
+        idx === activeIndex ||
+        idx === (activeIndex + 1) % images.length ||
+        idx === (activeIndex - 1 + images.length) % images.length;
 
     const goPrev = () =>
         setActiveIndex((prev) => (prev - 1 + images.length) % images.length);
@@ -266,7 +272,7 @@ function ProjectVisual({
                 </button>
 
                 <div className="pointer-events-none absolute inset-0">
-                    {images.map((img, idx) => (
+                    {images.map((img, idx) => isNear(idx) ? (
                         <div
                             key={idx}
                             className={`absolute inset-0 transition-opacity duration-500 ease-out ${idx === activeIndex ? "opacity-100" : "opacity-0"
@@ -279,10 +285,10 @@ function ProjectVisual({
                                 fill
                                 sizes="(min-width: 1280px) 62vw, (min-width: 1024px) 58vw, 100vw"
                                 className="object-cover object-center"
-                                priority={idx === 0}
+                                placeholder="blur"
                             />
                         </div>
-                    ))}
+                    ) : null)}
                 </div>
 
                 {/* Bottom gradient for indicator legibility */}
@@ -340,13 +346,19 @@ function ProjectVisual({
             </div>
 
             {/* Lightbox */}
+            <AnimatePresence>
             {lightboxOpen && (
-                <div
+                <motion.div
+                    key={`${project.name}-lightbox`}
                     role="dialog"
                     aria-modal="true"
                     aria-label={`${project.name} enlarged view`}
                     onClick={() => setLightboxOpen(false)}
                     className="fixed inset-0 z-[100] flex items-center justify-center bg-black/85 p-4 backdrop-blur-sm sm:p-8"
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    exit={{ opacity: 0 }}
+                    transition={{ duration: 0.3 }}
                 >
                     <button
                         type="button"
@@ -388,12 +400,16 @@ function ProjectVisual({
                         </>
                     )}
 
-                    <div
+                    <motion.div
                         onClick={(e) => e.stopPropagation()}
-                        className="relative max-h-[88vh] w-full max-w-[1400px]"
+                        className="relative max-h-[88svh] w-full max-w-[1400px]"
+                        initial={{ opacity: 0, scale: 0.97 }}
+                        animate={{ opacity: 1, scale: 1 }}
+                        exit={{ opacity: 0, scale: 0.97 }}
+                        transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
                     >
                         <div className="relative aspect-[2600/1200] w-full overflow-hidden border border-white/15 shadow-[0_35px_120px_-30px_rgba(0,0,0,0.9)]">
-                            {images.map((img, idx) => (
+                            {images.map((img, idx) => isNear(idx) ? (
                                 <div
                                     key={idx}
                                     className={`absolute inset-0 transition-opacity duration-500 ease-out ${idx === activeIndex
@@ -408,10 +424,10 @@ function ProjectVisual({
                                         fill
                                         sizes="100vw"
                                         className="object-contain"
-                                        priority
+                                        placeholder="blur"
                                     />
                                 </div>
-                            ))}
+                            ) : null)}
                         </div>
 
                         {hasMultiple && (
@@ -433,9 +449,10 @@ function ProjectVisual({
                                 ))}
                             </div>
                         )}
-                    </div>
-                </div>
+                    </motion.div>
+                </motion.div>
             )}
+            </AnimatePresence>
         </>
     );
 }
@@ -458,9 +475,15 @@ export default function Work() {
                     <section
                         key={project.number}
                         id={`project-${i + 1}`}
-                        className={`relative min-h-dvh overflow-hidden ${t.section}`}
+                        className={`relative min-h-dvh overflow-x-clip ${t.section}`}
                     >
-                        <div className="mx-auto flex min-h-dvh w-full max-w-[1600px] flex-col px-5 py-5 sm:px-8 lg:px-12 lg:py-7">
+                        <motion.div
+                            initial={{ opacity: 0, y: 24 }}
+                            whileInView={{ opacity: 1, y: 0 }}
+                            viewport={{ once: true, amount: 0.15 }}
+                            transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
+                            className="mx-auto flex min-h-dvh w-full max-w-[1600px] flex-col px-5 py-5 sm:px-8 lg:px-12 lg:py-7"
+                        >
                             {/* HEADER */}
                             <header
                                 className={`flex shrink-0 items-center justify-between border-b pb-4 ${t.rule}`}
@@ -494,7 +517,7 @@ export default function Work() {
                                 {/* CONTENT */}
                                 <div
                                     className={`
-                                        flex min-h-0 flex-col
+                                        order-last flex min-h-0 flex-col
                                         ${flip ? "lg:order-2" : "lg:order-1"}
                                     `}
                                 >
@@ -649,11 +672,12 @@ export default function Work() {
                                 {/* IMAGE — carousel + lightbox */}
                                 <div
                                     className={`
-                                        relative
-                                        w-full
+                                        order-first relative
+                                        w-[calc(100%+2.5rem)]
                                         min-w-0
                                         self-center
                                         aspect-[2600/1200]
+                                        -mx-5 sm:mx-0
                                         ${flip ? "lg:order-1" : "lg:order-2"}
                                     `}
                                 >
@@ -664,7 +688,8 @@ export default function Work() {
                             {/* FOOTER */}
                             <footer
                                 className={`
-                                    flex shrink-0 items-center
+                                    flex shrink-0 flex-col items-start gap-2
+                                    sm:flex-row sm:items-center
                                     justify-between
                                     border-t pt-4
                                     ${t.rule}
@@ -706,8 +731,8 @@ export default function Work() {
                                         />
                                     </a>
                                 ) : (
-                                    <a
-                                        href="#"
+                                    <Link
+                                        href="/work"
                                         className="
                                             group
                                             flex items-center gap-2
@@ -728,10 +753,10 @@ export default function Work() {
                                                 group-hover:translate-x-0.5
                                             "
                                         />
-                                    </a>
+                                    </Link>
                                 )}
                             </footer>
-                        </div>
+                        </motion.div>
                     </section>
                 );
             })}

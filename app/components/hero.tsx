@@ -7,6 +7,12 @@ import {
     FiLinkedin,
     FiMail,
 } from "react-icons/fi";
+import {
+    CopyEmailLink,
+    MotionMountReveal,
+    MotionStagger,
+    MotionItem,
+} from "./motion";
 
 const socials = [
     {
@@ -16,17 +22,17 @@ const socials = [
     },
     {
         label: "LinkedIn",
-        href: "https://linkedin.com/in/moizlatif",
+        href: "https://www.linkedin.com/in/moiz-latif-872414253/",
         Icon: FiLinkedin,
     },
     {
         label: "X",
-        href: "https://x.com/yourhandle",
+        href: "https://x.com/tusapyo",
         Icon: FaXTwitter,
     },
     {
         label: "Instagram",
-        href: "https://instagram.com/yourhandle",
+        href: "https://www.instagram.com/moizlatiff/",
         Icon: FiInstagram,
     },
     {
@@ -43,11 +49,11 @@ export default function Hero() {
     return (
         <HeroBackground>
             {/* CONTENT ROW */}
-            <div className="absolute inset-x-6 bottom-8 flex items-end justify-between lg:inset-x-12 lg:bottom-12">
+            <div className="absolute inset-x-0 bottom-0 flex items-end justify-between bg-gradient-to-t from-paper via-paper/85 to-transparent px-6 pb-8 pt-16 lg:inset-x-12 lg:bg-transparent lg:px-0 lg:pb-12 lg:pt-0">
                 {/* LEFT — statement + explore */}
-                <div className={`flex w-[min(78vw,24rem)] flex-col ${COLUMN}`}>
+                <MotionMountReveal className={`flex w-[min(78vw,24rem)] flex-col max-[425px]:items-center ${COLUMN}`}>
                     <p
-                        className={`text-[clamp(1.45rem,2.15vw,2.35rem)] leading-[1.12] text-ink ${serif.className}`}
+                        className={`text-[clamp(1.45rem,2.15vw,2.35rem)] leading-[1.12] text-ink max-[425px]:text-center ${serif.className}`}
                     >
                         I like software that feels simple on the surface —{" "}
                         <em className="text-muted">
@@ -75,17 +81,7 @@ export default function Hero() {
                             ↗
                         </span>
                     </a>
-                </div>
-
-                {/* RIGHT — short positioning + social icons */}
-                <div className={`hidden flex-col md:flex ${COLUMN}`}>
-                    <p className="text-sm leading-6 text-ink/70">
-                        I build full-stack products with the weight in the systems —
-                        making them fast, reliable, and easy to reason about.
-                    </p>
-
-                    {/* SOCIAL ICONS: individual circles, spread across the column */}
-                    <div className="mt-8 flex w-full items-center justify-between">
+                    <div className="mt-5 flex w-full items-center justify-between max-[425px]:w-auto max-[425px]:justify-center max-[425px]:gap-3 md:hidden">
                         {socials.map(({ label, href, Icon }) => (
                             <a
                                 key={label}
@@ -93,13 +89,48 @@ export default function Hero() {
                                 aria-label={label}
                                 target={href.startsWith("mailto:") ? undefined : "_blank"}
                                 rel="noopener noreferrer"
-                                className="group flex size-12 items-center justify-center rounded-full border border-ink/25 text-ink/70 transition-all duration-300 hover:-translate-y-1 hover:border-accent hover:text-accent"
+                                className="flex size-10 items-center justify-center rounded-full border border-ink/25 text-ink/70"
                             >
-                                <Icon className="text-[18px] transition-transform duration-300 group-hover:scale-110" />
+                                <Icon className="text-[16px]" />
                             </a>
                         ))}
                     </div>
-                </div>
+                </MotionMountReveal>
+
+                {/* RIGHT — short positioning + social icons */}
+                <MotionMountReveal className={`hidden flex-col md:flex ${COLUMN}`} delay={0.1}>
+                    <p className="text-sm leading-6 text-ink/70">
+                        I build full-stack products with the weight in the systems —
+                        making them fast, reliable, and easy to reason about.
+                    </p>
+
+                    <MotionStagger className="mt-8 flex w-full items-center justify-between">
+                        {socials.map(({ label, href, Icon }) => (
+                            <MotionItem key={label}>
+                                {href.startsWith("mailto:") ? (
+                                    <CopyEmailLink
+                                        email="moizlatif4137@gmail.com"
+                                        href={href}
+                                        aria-label={`${label} (copies email address)`}
+                                        className="group flex size-12 items-center justify-center rounded-full border border-ink/25 text-ink/70 transition-all duration-300 hover:-translate-y-1 hover:border-accent hover:text-accent"
+                                    >
+                                        <Icon className="text-[18px] transition-transform duration-300 group-hover:scale-110" />
+                                    </CopyEmailLink>
+                                ) : (
+                                    <a
+                                        href={href}
+                                        aria-label={label}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        className="group flex size-12 items-center justify-center rounded-full border border-ink/25 text-ink/70 transition-all duration-300 hover:-translate-y-1 hover:border-accent hover:text-accent"
+                                    >
+                                    <Icon className="text-[18px] transition-transform duration-300 group-hover:scale-110" />
+                                    </a>
+                                )}
+                            </MotionItem>
+                        ))}
+                    </MotionStagger>
+                </MotionMountReveal>
             </div>
         </HeroBackground>
     );

@@ -1,4 +1,5 @@
 import { mono, serif } from "@/app/fonts";
+import { MotionReveal, MotionStagger, MotionItem } from "./motion";
 import type { IconType } from "react-icons";
 import { FaHtml5, FaCss3Alt } from "react-icons/fa";
 import {
@@ -42,7 +43,6 @@ type Tool = {
 
 const stacks = [
     { name: "MERN", description: "MongoDB · Express · React · Node" },
-    { name: "PERN", description: "PostgreSQL · Express · React · Node" },
     { name: "NEXT.JS", description: "React · TypeScript · Full-stack" },
 ];
 
@@ -134,12 +134,12 @@ export default function Capabilities() {
     return (
         <section
             id="capabilities"
-            className="relative min-h-dvh overflow-hidden bg-paper text-ink lg:h-dvh lg:min-h-0"
+            className="relative min-h-dvh overflow-x-clip bg-paper text-ink lg:min-h-dvh"
         >
             <div className="mx-auto flex h-full w-full max-w-[1440px] flex-col px-6 py-6 sm:px-8 lg:px-14 lg:py-8">
 
                 {/* TOP BAR */}
-                <header className="flex shrink-0 items-center justify-between border-b border-ink/15 pb-4">
+                <MotionReveal className="flex shrink-0 items-center justify-between border-b border-ink/15 pb-4">
                     <span className="text-[9px] font-semibold uppercase tracking-[0.28em]">
                         02 / Capabilities
                     </span>
@@ -149,41 +149,42 @@ export default function Capabilities() {
                     >
                         The tools behind the work
                     </span>
-                </header>
+                </MotionReveal>
 
                 {/* CONTENT */}
                 <main className="grid min-h-0 flex-1 grid-cols-1 gap-10 py-8 lg:grid-cols-[0.72fr_1.28fr] lg:items-center lg:gap-16 lg:py-6">
 
                     {/* LEFT — INTRO */}
                     <div className="flex flex-col justify-center">
+                        <MotionReveal>
+                            <p
+                                className={`${mono.className} mb-5 text-[8px] uppercase tracking-[0.3em] text-accent`}
+                            >
+                                How I build
+                            </p>
 
-                        <p
-                            className={`${mono.className} mb-5 text-[8px] uppercase tracking-[0.3em] text-accent`}
-                        >
-                            How I build
-                        </p>
+                            <h2
+                                className={`${serif.className} max-w-[520px] text-[clamp(3rem,5vw,5.8rem)] leading-[0.86] tracking-[-0.06em]`}
+                            >
+                                What I
+                                <span className="block text-ink/35">
+                                    work with.
+                                </span>
+                            </h2>
 
-                        <h2
-                            className={`${serif.className} max-w-[520px] text-[clamp(3rem,5vw,5.8rem)] leading-[0.86] tracking-[-0.06em]`}
-                        >
-                            What I
-                            <span className="block text-ink/35">
-                                work with.
-                            </span>
-                        </h2>
-
-                        <p className="mt-7 max-w-[390px] text-[13px] leading-6 text-ink/55 lg:text-sm">
-                            I choose technologies around the product —
-                            balancing interface quality, maintainability,
-                            performance and the problem being solved.
-                        </p>
+                            <p className="mt-7 max-w-[390px] text-[13px] leading-6 text-ink/55 lg:text-sm">
+                                I choose technologies around the product —
+                                balancing interface quality, maintainability,
+                                performance and the problem being solved.
+                            </p>
+                        </MotionReveal>
 
                         {/* STACKS */}
-                        <div className="mt-9 max-w-[400px] border-t border-ink/15">
+                        <MotionStagger className="mt-2 max-w-[400px] border-t border-ink/15">
                             {stacks.map((stack) => (
-                                <div
+                                <MotionItem
                                     key={stack.name}
-                                    className="group flex items-center justify-between gap-5 border-b border-ink/15 py-3.5"
+                                    className="group flex flex-col items-start justify-between gap-1 border-b border-ink/15 py-3.5 sm:flex-row sm:items-center sm:gap-5"
                                 >
                                     <span
                                         className={`${mono.className} text-[12px] font-semibold tracking-[0.18em] transition-colors duration-300 group-hover:text-accent`}
@@ -191,23 +192,21 @@ export default function Capabilities() {
                                         {stack.name}
                                     </span>
 
-                                    <span className="text-right text-[12px] text-ink/40">
+                                    <span                                     className="text-left text-[12px] text-ink/40 sm:text-right">
                                         {stack.description}
                                     </span>
-                                </div>
+                                </MotionItem>
                             ))}
-                        </div>
+                        </MotionStagger>
                     </div>
 
                     {/* RIGHT — TECHNOLOGY MATRIX */}
                     <div className="min-w-0 lg:max-w-[850px] lg:justify-self-end">
-
-                        <div className="border-t border-ink/15">
-
+                        <MotionStagger className="border-t border-ink/15">
                             {layers.map((layer) => (
-                                <div
+                                <MotionItem
                                     key={layer.number}
-                                    className="group grid grid-cols-[30px_110px_1fr] gap-4 border-b border-ink/15 py-4 sm:grid-cols-[34px_145px_1fr] sm:gap-5 lg:grid-cols-[34px_155px_1fr] lg:py-[clamp(0.65rem,1.55vh,1rem)]"
+                                    className="group grid grid-cols-[28px_1fr] gap-3 border-b border-ink/15 py-4 sm:grid-cols-[34px_145px_1fr] sm:gap-5 lg:grid-cols-[34px_155px_1fr] lg:py-[clamp(0.65rem,1.55vh,1rem)]"
                                 >
                                     {/* NUMBER */}
                                     <span
@@ -230,12 +229,9 @@ export default function Capabilities() {
                                     </div>
 
                                     {/* TOOLS */}
-                                    <ul className="flex min-w-0 flex-wrap content-center gap-x-4 gap-y-2">
+                                    <ul className="col-start-2 flex min-w-0 flex-wrap content-center gap-x-4 gap-y-2 sm:col-start-auto">
                                         {layer.tools.map(({ name, Icon }) => (
-                                            <li
-                                                key={name}
-                                                className="flex items-center gap-1.5"
-                                            >
+                                            <li key={name} className="flex items-center gap-1.5">
                                                 <span className="flex size-3.5 shrink-0 items-center justify-center">
                                                     {Icon ? (
                                                         <Icon className="text-[13px] text-ink/35 transition-all duration-300 group-hover:text-accent" />
@@ -250,12 +246,12 @@ export default function Capabilities() {
                                             </li>
                                         ))}
                                     </ul>
-                                </div>
+                                </MotionItem>
                             ))}
-                        </div>
+                        </MotionStagger>
 
                         {/* SMALL FOOTNOTE */}
-                        <div className="mt-3 flex items-center justify-between">
+                        <MotionReveal delay={0.35} className="mt-3 flex flex-wrap items-center justify-between gap-3">
                             <span
                                 className={`${mono.className} text-[7px] uppercase tracking-[0.2em] text-ink/25`}
                             >
@@ -267,11 +263,9 @@ export default function Capabilities() {
                                 className="group flex items-center gap-1.5 text-[8px] font-semibold uppercase tracking-[0.18em] transition-colors hover:text-accent"
                             >
                                 Build something
-                                <FiArrowUpRight
-                                    className="transition-transform duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5"
-                                />
+                                <FiArrowUpRight className="transition-transform duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
                             </a>
-                        </div>
+                        </MotionReveal>
                     </div>
                 </main>
             </div>
